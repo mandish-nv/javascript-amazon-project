@@ -1,8 +1,8 @@
-import {cart} from '../data/cart.js';
-import {products} from '../data/products.js';
+import { cart, addToCart } from "../data/cart.js";
+import { products } from "../data/products.js";
 
-let productsHTML = '';
-products.forEach((product)=>{
+let productsHTML = "";
+products.forEach((product) => {
   productsHTML += `
       <div class="product-container">
           <div class="product-image-container">
@@ -23,7 +23,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-            $${(product.priceCents/100).toFixed(2)}
+            $${(product.priceCents / 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -56,38 +56,22 @@ products.forEach((product)=>{
   `;
 });
 
-document.querySelector('.js-products-grid').
-  innerHTML = productsHTML;
+document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+function updateCartQuantity() {
+  let cartQuantity = 0;
 
-document.querySelectorAll('.js-add-to-cart')
-  .forEach((button)=>{
-    button.addEventListener('click',()=>{
-      const productId = button.dataset.productId;
-      let matchingItem;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
 
-      cart.forEach((item)=>{
-        if (productId === item.productId){
-          matchingItem = item;
-        }
-      });
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
 
-      if(matchingItem){
-        matchingItem.quantity +=1;
-      }
-      else{
-        cart.push({
-          productId: productId,
-          quantity: 1
-        });
-      }
-
-      let cartQuantity = 0;
-
-      cart.forEach((item)=>{
-        cartQuantity += item.quantity;
-      });
-
-      document.querySelector('.js-cart-quantity').innerHTML= cartQuantity;
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    const productId = button.dataset.productId;
+    addToCart(productId);
+    updateCartQuantity();
   });
 });
