@@ -9,9 +9,9 @@ async function loadPage() {
   try{
     await loadProductsFetch();
 
-    await new Promise ((resolve)=>{
+    const value = await new Promise ((resolve)=>{
       loadCart(()=>{
-        resolve();
+        resolve('value3');
       });
     });
   } catch(error){
